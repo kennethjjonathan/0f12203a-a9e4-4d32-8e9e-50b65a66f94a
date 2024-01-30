@@ -1,26 +1,38 @@
 "use client";
 
+import PaginationNav from "@/components/PaginationNav/PaginationNav";
 import ProductsTable from "@/components/ProductsTable/ProductsTable";
 import CONSTANTS from "@/constants";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
+const PRODUCTPERPAGE: number = 10;
+
 export default function Home() {
+  const searchParams = useSearchParams();
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const getData = useCallback(async () => {
+    const page: string | null = searchParams.get("page");
     setIsLoading(true);
     try {
-      const data = await axios(
-        `${CONSTANTS.DATA_URL}/products?limit=10&skip=10`
-      );
+      const data = await axios(`${CONSTANTS.DATA_URL}/products`, {
+        params: {
+          limit: PRODUCTPERPAGE,
+          skip: page ? PRODUCTPERPAGE * parseInt(page) - PRODUCTPERPAGE : 0,
+        },
+      });
       setProducts(data.data.products);
+      setTotalPage(data.data.total / PRODUCTPERPAGE);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [searchParams]);
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -37,6 +49,9 @@ export default function Home() {
       </div>
       <div className="w-full">
         {products && <ProductsTable products={products} />}
+      </div>
+      <div className="w-full">
+        <PaginationNav totalPage={totalPage} />
       </div>
     </main>
   );
