@@ -9,19 +9,18 @@ interface PaginationNavProps {
   totalPage: number;
 }
 
+const SIDEPAGE: number = 2;
+const NUMBEROFSHOWNPAGE: number = SIDEPAGE + 5;
+
 const PaginationNav = ({ totalPage }: PaginationNavProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const paginationArray = useMemo(() => {
-    if (totalPage === undefined) {
-      return undefined;
-    }
-    const sidePage: number = 2;
-    const numberOfShownPage = sidePage + 5;
+    if (totalPage === undefined) return undefined;
 
-    if (numberOfShownPage >= totalPage) {
+    if (NUMBEROFSHOWNPAGE >= totalPage) {
       const returnArray: number[] = [];
       for (let i = 1; i <= totalPage; i++) {
         returnArray.push(i);
@@ -29,9 +28,9 @@ const PaginationNav = ({ totalPage }: PaginationNavProps) => {
       return returnArray;
     }
 
-    const leftSiblingIndex: number = Math.max(currentPage - sidePage, 1);
+    const leftSiblingIndex: number = Math.max(currentPage - SIDEPAGE, 1);
     const rightSiblingIndex: number = Math.min(
-      currentPage + sidePage,
+      currentPage + SIDEPAGE,
       totalPage
     );
 
@@ -39,7 +38,7 @@ const PaginationNav = ({ totalPage }: PaginationNavProps) => {
     const isRightDotsShown: boolean = rightSiblingIndex < totalPage - 2;
 
     if (!isLeftDotsShown && isRightDotsShown) {
-      const leftItem = 1 + 2 * sidePage;
+      const leftItem = 1 + 2 * SIDEPAGE;
       const leftTemp: number[] = [];
       for (let i = 1; i <= leftItem; i++) {
         leftTemp.push(i);
@@ -48,7 +47,7 @@ const PaginationNav = ({ totalPage }: PaginationNavProps) => {
     }
 
     if (isLeftDotsShown && !isRightDotsShown) {
-      const rightItem = 1 + 2 * sidePage;
+      const rightItem = 1 + 2 * SIDEPAGE;
       const rightTemp: number[] = [];
       for (let i = totalPage - rightItem + 1; i <= totalPage; i++) {
         rightTemp.push(i);
@@ -92,12 +91,12 @@ const PaginationNav = ({ totalPage }: PaginationNavProps) => {
     setInitialState();
   }, [searchParams]);
 
-  if (totalPage < 2) {
+  if (totalPage === undefined || totalPage < 2) {
     return null;
   }
 
   return (
-    <div
+    <nav
       aria-label="pagination buttons"
       className="mx-auto flex w-full justify-center items-center gap-1"
     >
@@ -137,7 +136,7 @@ const PaginationNav = ({ totalPage }: PaginationNavProps) => {
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
-    </div>
+    </nav>
   );
 };
 
