@@ -3,8 +3,10 @@
 import PaginationNav from "@/components/PaginationNav/PaginationNav";
 import ProductsTable from "@/components/ProductsTable/ProductsTable";
 import TableSkeleton from "@/components/Skeletons/TableSkeleton/TableSkeleton";
+import { Button } from "@/components/ui/button";
 import CONSTANTS from "@/constants";
 import axios from "axios";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -40,6 +42,11 @@ export default function Home() {
 
   return (
     <main className="container flex flex-col justify-center items-center gap-2 min-h-screen">
+      <div className="w-full flex justify-end items-center">
+        <Button size={"lg"} asChild>
+          <Link href={"/create"}>Add a product</Link>
+        </Button>
+      </div>
       {isLoading ? (
         <TableSkeleton />
       ) : (
