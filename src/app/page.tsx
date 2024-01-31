@@ -39,7 +39,7 @@ export default function Home() {
   }, [getData]);
 
   return (
-    <main className="container flex flex-col justify-center items-center min-h-screen gap-2">
+    <main className="container flex flex-col justify-center items-center gap-2 min-h-screen">
       {isLoading ? (
         <TableSkeleton />
       ) : (

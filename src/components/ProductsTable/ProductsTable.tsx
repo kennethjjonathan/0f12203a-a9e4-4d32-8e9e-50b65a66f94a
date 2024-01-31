@@ -4,8 +4,9 @@ import {
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
+    TableRow,
 } from "@/components/ui/table";
+import { Button } from "../ui/button";
 
 type ProductsTableProps = {
   products: IProduct[];
@@ -22,6 +23,7 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
           <TableHead>Category</TableHead>
           <TableHead>Stock</TableHead>
           <TableHead>Price</TableHead>
+          <TableHead colSpan={2}>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -34,6 +36,16 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
               <TableCell>{product.category}</TableCell>
               <TableCell>{product.stock}</TableCell>
               <TableCell>{product.price}</TableCell>
+              <TableCell>
+                <Button size={"sm"} variant={"secondary"}>
+                  Edit
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button size={"sm"} variant={"destructive"}>
+                  Delete
+                </Button>
+              </TableCell>
             </TableRow>
           );
         })}
